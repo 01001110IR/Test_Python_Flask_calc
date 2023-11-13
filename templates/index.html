@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <!-- Include Axios from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <form id="calculator-form">
+        <label for="num1">Enter number 1:</label>
+        <input type="number" id="num1" name="num1">
+        <br>
+        <label for="num2">Enter number 2:</label>
+        <input type="number" id="num2" name="num2">
+        <br>
+        <button type="button" id="add-button">Add</button>
+        <button type="button" id="subtract-button">Subtract</button>
+        <button type="button" id="palindrome-button">Check Palindrome</button>
+        <button type="button" id="sum-digits-button">Sum Digits</button>
+        <button type="button" id="zip-button">Zip</button>
+    </form>
+    <p>Result: <span id="result"></span></p>
+
+    <script>
+        const MY_SERVER = 'http://127.0.0.1:7000';
+
+        const num1Input = document.getElementById('num1');
+        const num2Input = document.getElementById('num2');
+        const resultSpan = document.getElementById('result');
+
+        function fetchData(endpoint) {
+            axios.get(`${MY_SERVER}/${endpoint}`)
+            .then(function (response) {
+                resultSpan.textContent = `Result: ${response.data}`;
+            })
+            .catch(function (error) {
+                // Handle any errors here
+                console.error(error);
+            });
+        }
+
+        document.getElementById('add-button').addEventListener('click', function () {
+            fetchData('add?num1=' + num1Input.value + '&num2=' + num2Input.value);
+        });
+
+        document.getElementById('subtract-button').addEventListener('click', function () {
+            fetchData('2?num1=' + num1Input.value + '&num2=' + num2Input.value);
+        });
+
+        document.getElementById('palindrome-button').addEventListener('click', function () {
+            const inputString = prompt("Enter a string to check for palindrome:");
+            fetchData('3?input_string=' + inputString);
+        });
+
+        document.getElementById('sum-digits-button').addEventListener('click', function () {
+            const inputNumber = prompt("Enter a number to sum its digits:");
+            fetchData('4?input_number=' + inputNumber);
+        });
+
+        document.getElementById('zip-button').addEventListener('click', function () {
+            const iterable1 = prompt("Enter values for iterable1 (comma-separated):").split(',');
+            const iterable2 = prompt("Enter values for iterable2 (comma-separated):").split(',');
+            
+            fetchData('5?iterable1=' + iterable1.join(',') + '&iterable2=' + iterable2.join(','));
+        });
+    </script>
+</body>
+</html>
