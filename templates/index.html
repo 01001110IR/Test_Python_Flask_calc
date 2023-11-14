@@ -1,71 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
-    <!-- Include Axios from a CDN -->
+    <title>Number Operations</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-    <h1>Calculator</h1>
-    <form id="calculator-form">
-        <label for="num1">Enter number 1:</label>
-        <input type="number" id="num1" name="num1">
-        <br>
-        <label for="num2">Enter number 2:</label>
-        <input type="number" id="num2" name="num2">
-        <br>
-        <button type="button" id="add-button">Add</button>
-        <button type="button" id="subtract-button">Subtract</button>
-        <button type="button" id="palindrome-button">Check Palindrome</button>
-        <button type="button" id="sum-digits-button">Sum Digits</button>
-        <button type="button" id="zip-button">Zip</button>
-    </form>
-    <p>Result: <span id="result"></span></p>
-
-    <script>
-        const MY_SERVER = 'http://127.0.0.1:7000';
-
-        const num1Input = document.getElementById('num1');
-        const num2Input = document.getElementById('num2');
-        const resultSpan = document.getElementById('result');
-
-        function fetchData(endpoint) {
-            axios.get(`${MY_SERVER}/${endpoint}`)
-            .then(function (response) {
-                resultSpan.textContent = `Result: ${response.data}`;
-            })
-            .catch(function (error) {
-                // Handle any errors here
-                console.error(error);
-            });
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212; /* Dark background color */
+            color: #fff; /* Light text color */
         }
 
-        document.getElementById('add-button').addEventListener('click', function () {
-            fetchData('add?num1=' + num1Input.value + '&num2=' + num2Input.value);
-        });
+        /* Dark mode styles for the header */
+        header {
+            background-color: #333; /* Darker header background color */
+        }
 
-        document.getElementById('subtract-button').addEventListener('click', function () {
-            fetchData('2?num1=' + num1Input.value + '&num2=' + num2Input.value);
-        });
+        /* Dark mode styles for the form fields */
+        .form-control {
+            background-color: #333; /* Darker form field background color */
+            color: #fff; /* Light text color for form fields */
+        }
 
-        document.getElementById('palindrome-button').addEventListener('click', function () {
-            const inputString = prompt("Enter a string to check for palindrome:");
-            fetchData('3?input_string=' + inputString);
-        });
+        /* Dark mode styles for buttons */
+        .btn-primary {
+            background-color: #007bff; /* Primary button color */
+        }
 
-        document.getElementById('sum-digits-button').addEventListener('click', function () {
-            const inputNumber = prompt("Enter a number to sum its digits:");
-            fetchData('4?input_number=' + inputNumber);
-        });
+        /* Add more dark mode styles as needed */
+    </style>
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-4">
+        <h1>Calculator</h1>
+    </header>
 
-        document.getElementById('zip-button').addEventListener('click', function () {
-            const iterable1 = prompt("Enter values for iterable1 (comma-separated):").split(',');
-            const iterable2 = prompt("Enter values for iterable2 (comma-separated):").split(',');
-            
-            fetchData('5?iterable1=' + iterable1.join(',') + '&iterable2=' + iterable2.join(','));
-        });
-    </script>
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <form id="addForm">
+                    <!-- טופס הוספת מספרים -->
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="num1" placeholder="First Number" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="num2" placeholder="Second Number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+                <div id="addResult" class="mt-3"></div>
+            </div>
+            <div class="col-md-6">
+                <form id="subtractForm">
+                    <!-- טופס החיסור מספרים -->
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="num1" placeholder="Number to Subtract From" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="num2" placeholder="Number to Subtract" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Subtract</button>
+                </form>
+                <div id="subtractResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- קווים מתארים בין הטופסים -->
+        <hr>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <form id="sumOfDigitsForm">
+                    <!-- טופס חישוב סכום הספרות במספר -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="input_number" placeholder="Enter a number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate Sum of Digits</button>
+                </form>
+                <div id="sumOfDigitsResult" class="mt-3"></div>
+            </div>
+            <div class="col-md-6">
+                <form id="palindromeForm">
+                    <!-- טופס בדיקת פלינדרום במחרוזת -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="input_string" placeholder="Enter a number or string " required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Check Palindrome</button>
+                </form>
+                <div id="palindromeResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- קווים מתארים בין הטופסים -->
+        <hr>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <form id="zipform">
+                    <!-- טופס שילוב רשימות -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="iterable1" placeholder="Enter first list, comma-separated" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="iterable2" placeholder="Enter second list, comma-separated" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Zip Lists</button>
+                </form>
+                <div id="zipresult" class="mt-3"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Bootstrap JS (Popper.js and Bootstrap JS) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+ <script>
+    const MY_SERVER = 'http://127.0.0.1:7000';
+
+    // Add operation
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        axios.get(`${MY_SERVER}/add`, { params })
+            .then(function (response) {
+                document.getElementById('addResult').innerText = response.data.result;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    // Subtract operation
+    document.getElementById('subtractForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        axios.get(`${MY_SERVER}/2`, { params })
+            .then(function (response) {
+                document.getElementById('subtractResult').innerText = response.data.result;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    // Sum of Digits operation
+    document.getElementById('sumOfDigitsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        axios.get(`${MY_SERVER}/4`, { params })
+            .then(function (response) {
+                document.getElementById('sumOfDigitsResult').innerText = response.data.result;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    // Palindrome Check
+    document.getElementById('palindromeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        axios.get(`${MY_SERVER}/3`, { params })
+            .then(function (response) {
+                document.getElementById('palindromeResult').innerText = response.data.result;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    // Zip operation
+    document.getElementById('zipform').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        axios.get(`${MY_SERVER}/5`, { params })
+            .then(function (response) {
+                document.getElementById('zipresult').innerText = response.data.result;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+</script>
+
+    
 </body>
 </html>

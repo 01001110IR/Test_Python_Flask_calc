@@ -7,3 +7,4 @@ def myzip(it1, it2):
         except StopIteration:
             break
     print("Zip completed.")
+##tools/numbers/col.py

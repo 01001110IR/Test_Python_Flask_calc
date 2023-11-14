@@ -10,3 +10,4 @@ def print_number_and_reverse(n):
         return f"The number {n} is a palindrome."
     else:
         return f"Original: {original}, Reversed: {reversed_str}"
+#tools/numbers/comp.py
